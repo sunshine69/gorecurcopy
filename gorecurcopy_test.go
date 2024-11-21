@@ -60,14 +60,3 @@ func equals(tb testing.TB, exp, act interface{}) {
 		tb.FailNow()
 	}
 }
-
-func TestReadDir(t *testing.T) {
-	dirs, _ := os.ReadDir("/home/sitsxk5/tmp")
-	for _, e := range dirs {
-		// println(e.Type())
-		if e.Name() == "tmp" {
-			println("HIT ME")
-		}
-	}
-
-}
