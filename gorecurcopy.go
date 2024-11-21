@@ -7,14 +7,18 @@ package gorecurcopy
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
 
 // CopyDirectory recursively copies a src directory to a destination.
 func CopyDirectory(src, dst string) error {
-	entries, err := ioutil.ReadDir(src)
+	if !exists(dst) {
+		if err := createDir(dst, 0755); err != nil {
+			return err
+		}
+	}
+	entries, err := os.ReadDir(src)
 	if err != nil {
 		return err
 	}
@@ -61,9 +65,9 @@ func CopyDirectory(src, dst string) error {
 			}
 		*/
 
-		isSymlink := entry.Mode()&os.ModeSymlink != 0
+		isSymlink := entry.Type()&os.ModeSymlink != 0
 		if !isSymlink {
-			if err := os.Chmod(destPath, entry.Mode()); err != nil {
+			if err := os.Chmod(destPath, entry.Type()); err != nil {
 				return err
 			}
 		}
